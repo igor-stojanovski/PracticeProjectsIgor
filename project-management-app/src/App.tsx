@@ -1,35 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import NewProject from "./components/NewProject";
+import NoProjectSelected from "./components/NoProjectSelected";
+import SideBar from "./components/SideBar";
+import SelectedProject from "./components/SelectedProject";
+
+type ProjectState = {
+  selectedProjectId: undefined | null | number;
+  projects: Project[];
+};
+
+export type Project = {
+  title: string;
+  desc: string;
+  dueDate: string;
+  id: undefined | null | number;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [projectsState, setProjectsState] = useState<ProjectState>({
+    selectedProjectId: undefined,
+    projects: [],
+  });
+
+  function handleStartAddProject() {
+    setProjectsState((prevProjects) => {
+      return {
+        ...prevProjects,
+        selectedProjectId: null,
+      };
+    });
+  }
+
+  function handleCancelAddProject() {
+    setProjectsState((prevProjects) => {
+      return {
+        ...prevProjects,
+        selectedProjectId: undefined,
+      };
+    });
+  }
+
+  function handleAddProject(projectData: Project) {
+    setProjectsState((prevProjectsState) => {
+      const newProject = {
+        ...projectData,
+      };
+
+      return {
+        ...prevProjectsState,
+        selectedProjectId: undefined,
+        projects: [...prevProjectsState.projects, newProject],
+      };
+    });
+  }
+
+  function handleSelectProject(id: undefined | null | number) {
+    setProjectsState((prevProjects) => {
+      return {
+        ...prevProjects,
+        selectedProjectId: id,
+      };
+    });
+  }
+
+  function handleDeleteProject() {
+    setProjectsState((prevProjectsState) => {
+      const filteredProjects = prevProjectsState.projects.filter(
+        (project) => project.id !== prevProjectsState.selectedProjectId
+      );
+      return {
+        ...prevProjectsState,
+        selectedProjectId: undefined,
+        projects: [...filteredProjects],
+      };
+    });
+  }
+
+  const selectedProject = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProjectId
+  );
+
+  let content;
+
+  if (projectsState.selectedProjectId === null) {
+    content = (
+      <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
+    );
+  } else if (projectsState.selectedProjectId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
+  } else {
+    content = (
+      <SelectedProject
+        project={selectedProject!}
+        onDeleteProject={handleDeleteProject}
+      />
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main className="h-screen my-8 flex gap-8">
+      <SideBar
+        selectedProjectId={projectsState.selectedProjectId}
+        projects={projectsState.projects}
+        onStartAddProject={handleStartAddProject}
+        onSelectProject={handleSelectProject}
+      />
+      {content}
+    </main>
+  );
 }
 
-export default App
+export default App;
