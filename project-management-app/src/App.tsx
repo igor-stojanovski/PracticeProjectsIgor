@@ -8,6 +8,12 @@ import SelectedProject from "./components/SelectedProject";
 type ProjectState = {
   selectedProjectId: undefined | null | number;
   projects: Project[];
+  tasks: string[];
+};
+
+export type Task = {
+  id: number;
+  taskText: string;
 };
 
 export type Project = {
@@ -21,7 +27,26 @@ function App() {
   const [projectsState, setProjectsState] = useState<ProjectState>({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
+
+  function handleAddTask(task: string) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, task],
+      };
+    });
+  }
+
+  function handleDeleteTask(taskToDelete: string) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter((task) => task !== taskToDelete),
+      };
+    });
+  }
 
   function handleStartAddProject() {
     setProjectsState((prevProjects) => {
@@ -94,6 +119,9 @@ function App() {
       <SelectedProject
         project={selectedProject!}
         onDeleteProject={handleDeleteProject}
+        onAddTask={handleAddTask}
+        onDeleteTask={handleDeleteTask}
+        tasks={projectsState.tasks}
       />
     );
   }

@@ -1,13 +1,20 @@
 import { Project } from "../App";
+import Tasks from "./Tasks";
 
 type Props = {
   onDeleteProject: () => void;
   project: Project;
+  onAddTask: (task: string) => void;
+  onDeleteTask: (taskToDelete: string) => void;
+  tasks: string[];
 };
 
 export default function SelectedProject({
   project: { desc, dueDate, title },
   onDeleteProject,
+  onAddTask,
+  onDeleteTask,
+  tasks,
 }: Props) {
   const formattedDate = new Date(dueDate).toLocaleDateString("en-US", {
     year: "numeric",
@@ -29,7 +36,7 @@ export default function SelectedProject({
         <p className="mb-4 text-stone-400">{formattedDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{desc}</p>
       </header>
-      Tasks
+      <Tasks tasks={tasks} onAddTask={onAddTask} onDeleteTask={onDeleteTask} />
     </div>
   );
 }
