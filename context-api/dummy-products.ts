@@ -1,19 +1,19 @@
 import mochaOvercoat from "./src/assets/mocha-overcoat.jpg";
-import dreamGown from "./assets/dream-gown.jpg";
-import rainJacket from "./assets/rain-jacket.jpg";
-import merlotSuit from "./assets/merlot-suit.jpg";
-import moonlightDress from "./assets/moonlight-dress.jpg";
-import denimPioneer from "./assets/denim-pioneer.jpg";
+import dreamGown from "./src/assets/dream-gown.jpg";
+import rainJacket from "./src/assets/rain-jacket.jpg";
+import merlotSuit from "./src/assets/merlot-suit.jpg";
+import moonlightDress from "./src/assets/moonlight-dress.jpg";
+import denimPioneer from "./src/assets/denim-pioneer.jpg";
 
-export type Product = {
+export type ProductType = {
   id: string;
   image: string;
-  title: String;
-  price: Number;
+  title: string;
+  price: number;
   description: string;
 };
 
-export const DUMMY_PRODUCTS: Product[] = [
+export const DUMMY_PRODUCTS: ProductType[] = [
   {
     id: "p1",
     image: mochaOvercoat,
@@ -64,3 +64,5 @@ export const DUMMY_PRODUCTS: Product[] = [
       "Our Pioneer Rugged Denim Jacket is a tribute to those who embody the spirit of adventure. Designed with durability and comfort in mind, this jacket is a wardrobe essential for the urban explorer.",
   },
 ];
+
+export default DUMMY_PRODUCTS;
