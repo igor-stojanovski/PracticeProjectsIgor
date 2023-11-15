@@ -23,10 +23,9 @@ export function CartContextProvider({ children }: CartCType) {
   function handleAddItemToCart(item: ItemType) {
     if (shoppingCart.items.includes(item)) return;
 
-    const newItem = item;
-    newItem.quantity = 1;
-
     setShoppingCart((prevState) => {
+      const newItem = item;
+      newItem.quantity = 1;
       return {
         ...prevState,
         items: [...prevState.items, newItem],
@@ -39,9 +38,20 @@ export function CartContextProvider({ children }: CartCType) {
     currentItem!.quantity += addOrDecreaseQuantity;
 
     setShoppingCart((prevState) => {
-      return {
-        ...prevState,
-      };
+      if (currentItem?.quantity === 0) {
+        const updatedItems = prevState.items.filter(
+          (item) => item !== currentItem
+        );
+
+        return {
+          ...prevState,
+          items: [...updatedItems],
+        };
+      } else {
+        return {
+          ...prevState,
+        };
+      }
     });
   }
 
