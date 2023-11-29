@@ -18,7 +18,6 @@ export default function Meals() {
   if (!loadedMeals) {
     return <p>No meals found.</p>;
   }
-  console.log(error);
 
   if (error) {
     return <Error title="Failed to fetch meals" message={error} />;
